@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    container_name: devhunt_postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=devhunt
+    ports:
+      - '5432:5432'
+    volumes:
+      - devhunt_db_data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: devhunt_pgadmin
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@devhunt.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - ALLOW_SPECIAL_EMAIL_DOMAINS=[devhunt]
+    ports:
+      - '5050:80'
+volumes:
+  devhunt_db_data:
