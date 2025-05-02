@@ -41,7 +41,7 @@ export class AuthService {
     }
 
     async sighToken(userId: string, email: string) {
-        const payload = { userId, email };
+        const payload = { sub: userId, email };
         const token = await this.jwtService.signAsync(payload);
         return { access_token: token };
     }
