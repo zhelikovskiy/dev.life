@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class LikeController {
     constructor(private likeService: LikeService) {}
 
-    @Post(':id')
+    @Post(':projectId')
     toggle(@Param('projectId') projectId: string, @Req() req: Request) {
         return this.likeService.toogleLike(projectId, req.user.sub);
     }
