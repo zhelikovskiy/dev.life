@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { LikeModule } from './like/like.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { LikeModule } from './like/like.module';
         AuthModule,
         ProjectModule,
         LikeModule,
+        CommentModule,
     ],
     controllers: [AppController],
     providers: [AppService],

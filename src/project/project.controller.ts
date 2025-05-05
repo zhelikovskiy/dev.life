@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 
-@Controller('project')
+@Controller('projects')
 export class ProjectController {
     constructor(private projectService: ProjectService) {}
 
