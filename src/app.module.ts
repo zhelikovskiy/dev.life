@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
 import { LikeModule } from './like/like.module';
 import { CommentModule } from './comment/comment.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { CommentModule } from './comment/comment.module';
         ProjectModule,
         LikeModule,
         CommentModule,
+        UploadModule,
     ],
     controllers: [AppController],
     providers: [AppService],
