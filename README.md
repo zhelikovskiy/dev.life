@@ -1,6 +1,6 @@
-# DevHunt — platform for developers
+# dev.life — platform for developers
 
-DevHunt — a platform where developers can publish their projects, get feedback, gain likes and build their techno-community..
+dev.life — a platform where developers can publish their projects, get feedback, gain likes and build their techno-community..
 
 🚀 The MVP is now ready and available via API!
 
@@ -38,3 +38,8 @@ DevHunt — a platform where developers can publish their projects, get feedback
 - 🔍 Search by projects
 
 ---
+🤝 Contacts
+
+Developer: Zhelikovskiy Artem
+GitHub: [@zhelikovskiy](https://github.com/zhelikovskiy)
+Email: zhelikovskiy.artem@gmail.com
