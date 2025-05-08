@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Param,
+    Patch,
     Post,
     Req,
     Request,
@@ -24,6 +25,15 @@ export class CommentController {
         @Req() req: Request,
     ) {
         return this.commentService.create(projectId, req.user.sub, dto);
+    }
+
+    @Patch(':commentId')
+    update(
+        @Param('commentId') commentId: string,
+        @Body() dto: CreateCommentDto,
+        @Req() req: Request,
+    ) {
+        return this.commentService.update(commentId, req.user.sub, dto);
     }
 
     @Delete(':commentId')
