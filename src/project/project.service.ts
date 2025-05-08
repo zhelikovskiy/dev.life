@@ -20,8 +20,10 @@ export class ProjectService {
         return this.prisma.project.findMany({
             include: {
                 user: true,
-                likes: true,
                 comments: true,
+                _count: {
+                    select: { likes: true },
+                },
             },
         });
     }
@@ -31,7 +33,6 @@ export class ProjectService {
             where: { id },
             include: {
                 user: true,
-                likes: true,
                 comments: true,
             },
         });
