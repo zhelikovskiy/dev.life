@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
+import { comparePasswordsHash, generatePasswordHash } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +11,7 @@ export class AuthService {
     ) {}
 
     async register(email: string, password: string) {
-        const hash = await bcrypt.hash(password, 10);
+        const hash = await generatePasswordHash(password);
 
         try {
             const user = await this.prisma.user.create({
@@ -34,7 +34,7 @@ export class AuthService {
         });
         if (!user) throw new ForbiddenException('Invalid credentials');
 
-        const match = await bcrypt.compare(password, user.password);
+        const match = await comparePasswordsHash(password, user.password);
         if (!match) throw new ForbiddenException('Invalid credentials');
 
         return this.sighToken(user.id, user.email);
