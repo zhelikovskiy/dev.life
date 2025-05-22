@@ -8,6 +8,7 @@ import { ProjectModule } from './project/project.module';
 import { LikeModule } from './like/like.module';
 import { CommentModule } from './comment/comment.module';
 import { UploadModule } from './upload/upload.module';
+import { UserModule } from './user/user.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { UploadModule } from './upload/upload.module';
         LikeModule,
         CommentModule,
         UploadModule,
+        UserModule,
     ],
     controllers: [AppController],
     providers: [AppService],
