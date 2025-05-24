@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsUrl } from 'class-validator';
 
-export class CreateUserDto {
+export class UreateUserDto {
     @ApiProperty({ example: 'best_dev' })
     @IsString()
     username: string;
