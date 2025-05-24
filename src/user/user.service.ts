@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
-import { UreateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { comparePasswordsHash, generatePasswordHash } from 'src/utils/utils';
 import { GetUserInfoDto } from './dto/get-user-info.dto';
 
@@ -41,7 +41,7 @@ export class UserService {
         return this.prisma.user.findUnique({ where: { id } });
     }
 
-    async updateOne(userId: string, dto: UreateUserDto): Promise<User> {
+    async updateOne(userId: string, dto: UpdateUserDto): Promise<User> {
         const existingUsername = await this.prisma.user.findUnique({
             where: { username: dto.username },
         });
