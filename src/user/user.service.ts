@@ -41,6 +41,10 @@ export class UserService {
         return this.prisma.user.findUnique({ where: { id } });
     }
 
+    async getOneByEmail(email: string): Promise<User | null> {
+        return this.prisma.user.findUnique({ where: { email } });
+    }
+
     async updateOne(userId: string, dto: UpdateUserDto): Promise<User> {
         const existingUsername = await this.prisma.user.findUnique({
             where: { username: dto.username },

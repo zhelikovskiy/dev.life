@@ -1,43 +1,56 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    InternalServerErrorException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { UserService } from 'src/user/user.service';
 import { comparePasswordsHash, generatePasswordHash } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private prisma: PrismaService,
         private jwtService: JwtService,
+        private userService: UserService,
     ) {}
 
-    async register(email: string, password: string) {
-        const hash = await generatePasswordHash(password);
+    async register(dto: CreateUserDto) {
+        const hash = await generatePasswordHash(dto.password);
 
         try {
-            const user = await this.prisma.user.create({
-                data: {
-                    email,
-                    password: hash,
-                },
+            const user = await this.userService.createOne({
+                ...dto,
+                password: hash,
             });
-
             return this.sighToken(user.id, user.email);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            throw new ForbiddenException('Email already in use');
+        } catch (error: any) {
+            if (error instanceof ForbiddenException) {
+                throw error;
+            } else {
+                console.error(error);
+                throw new InternalServerErrorException();
+            }
         }
     }
 
     async login(email: string, password: string) {
-        const user = await this.prisma.user.findUnique({
-            where: { email },
-        });
-        if (!user) throw new ForbiddenException('Invalid credentials');
+        try {
+            const user = await this.userService.getOneByEmail(email);
+            if (!user) throw new ForbiddenException('Invalid credentials');
 
-        const match = await comparePasswordsHash(password, user.password);
-        if (!match) throw new ForbiddenException('Invalid credentials');
+            const match = await comparePasswordsHash(password, user.password);
+            if (!match) throw new ForbiddenException('Invalid credentials');
 
-        return this.sighToken(user.id, user.email);
+            return this.sighToken(user.id, user.email);
+        } catch (error: any) {
+            if (error instanceof ForbiddenException) {
+                throw error;
+            } else {
+                console.error(error);
+                throw new InternalServerErrorException();
+            }
+        }
     }
 
     async sighToken(userId: string, email: string) {
