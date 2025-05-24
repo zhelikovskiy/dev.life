@@ -21,9 +21,9 @@ export class CommentService {
         const comment = await this.prisma.comment.findUnique({
             where: { id: commentId, userId: userId },
         });
-        if (!comment || comment.userId !== userId) {
+        if (!comment || comment.userId !== userId)
             throw new ForbiddenException('Not your comment');
-        }
+
         return this.prisma.comment.update({
             where: { id: commentId },
             data: {
@@ -36,9 +36,9 @@ export class CommentService {
         const comment = await this.prisma.comment.findUnique({
             where: { id: commentId, userId: userId },
         });
-        if (!comment || comment.userId !== userId) {
+        if (!comment || comment.userId !== userId)
             throw new ForbiddenException('Not your comment');
-        }
+
         return this.prisma.comment.delete({
             where: { id: commentId },
         });

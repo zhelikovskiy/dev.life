@@ -18,39 +18,21 @@ export class AuthService {
     async register(dto: CreateUserDto) {
         const hash = await generatePasswordHash(dto.password);
 
-        try {
-            const user = await this.userService.createOne({
-                ...dto,
-                password: hash,
-            });
-            return this.sighToken(user.id, user.email);
-        } catch (error: any) {
-            if (error instanceof ForbiddenException) {
-                throw error;
-            } else {
-                console.error(error);
-                throw new InternalServerErrorException();
-            }
-        }
+        const user = await this.userService.createOne({
+            ...dto,
+            password: hash,
+        });
+        return this.sighToken(user.id, user.email);
     }
 
     async login(email: string, password: string) {
-        try {
-            const user = await this.userService.getOneByEmail(email);
-            if (!user) throw new ForbiddenException('Invalid credentials');
+        const user = await this.userService.getOneByEmail(email);
+        if (!user) throw new ForbiddenException('Invalid credentials');
 
-            const match = await comparePasswordsHash(password, user.password);
-            if (!match) throw new ForbiddenException('Invalid credentials');
+        const match = await comparePasswordsHash(password, user.password);
+        if (!match) throw new ForbiddenException('Invalid credentials');
 
-            return this.sighToken(user.id, user.email);
-        } catch (error: any) {
-            if (error instanceof ForbiddenException) {
-                throw error;
-            } else {
-                console.error(error);
-                throw new InternalServerErrorException();
-            }
-        }
+        return this.sighToken(user.id, user.email);
     }
 
     async sighToken(userId: string, email: string) {
