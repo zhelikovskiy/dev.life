@@ -12,16 +12,16 @@ export class CommentService {
             data: {
                 content: dto.content,
                 projectId: projectId,
-                userId: userId,
+                authorId: userId,
             },
         });
     }
 
     async update(commentId: string, userId: string, dto: UpdateCommentDto) {
         const comment = await this.prisma.comment.findUnique({
-            where: { id: commentId, userId: userId },
+            where: { id: commentId, authorId: userId },
         });
-        if (!comment || comment.userId !== userId)
+        if (!comment || comment.authorId !== userId)
             throw new ForbiddenException('Not your comment');
 
         return this.prisma.comment.update({
@@ -34,9 +34,9 @@ export class CommentService {
 
     async remove(commentId: string, userId: string) {
         const comment = await this.prisma.comment.findUnique({
-            where: { id: commentId, userId: userId },
+            where: { id: commentId, authorId: userId },
         });
-        if (!comment || comment.userId !== userId)
+        if (!comment || comment.authorId !== userId)
             throw new ForbiddenException('Not your comment');
 
         return this.prisma.comment.delete({

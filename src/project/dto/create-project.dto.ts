@@ -16,5 +16,5 @@ export class CreateProjectDto {
         example: `https://github.com/zhelikovskiy/TODO-List-Backend`,
     })
     @IsUrl()
-    link: string;
+    repositoryLink: string;
 }

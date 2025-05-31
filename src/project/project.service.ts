@@ -7,11 +7,11 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 export class ProjectService {
     constructor(private prisma: PrismaService) {}
 
-    async create(userId: string, dto: CreateProjectDto) {
+    async create(authorId: string, dto: CreateProjectDto) {
         return this.prisma.project.create({
             data: {
                 ...dto,
-                userId,
+                authorId,
             },
         });
     }
@@ -19,7 +19,7 @@ export class ProjectService {
     async findAll() {
         return this.prisma.project.findMany({
             include: {
-                user: true,
+                author: true,
                 comments: true,
                 _count: {
                     select: { likes: true },
@@ -32,15 +32,15 @@ export class ProjectService {
         return this.prisma.project.findUnique({
             where: { id },
             include: {
-                user: true,
+                author: true,
                 comments: true,
             },
         });
     }
 
-    async update(id: string, userId: string, dto: UpdateProjectDto) {
+    async update(id: string, authorId: string, dto: UpdateProjectDto) {
         const project = await this.prisma.project.findUnique({ where: { id } });
-        if (!project || project.userId !== userId) {
+        if (!project || project.authorId !== authorId) {
             throw new ForbiddenException('Access denied');
         }
         return this.prisma.project.update({
@@ -51,9 +51,9 @@ export class ProjectService {
         });
     }
 
-    async remove(id: string, userId: string) {
+    async remove(id: string, authorId: string) {
         const project = await this.prisma.project.findUnique({ where: { id } });
-        if (!project || project.userId !== userId) {
+        if (!project || project.authorId !== authorId) {
             throw new ForbiddenException('Access denied');
         }
         return this.prisma.project.delete({ where: { id } });

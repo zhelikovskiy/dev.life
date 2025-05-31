@@ -32,7 +32,7 @@ export class UserService {
                 username: dto.username,
                 email: dto.email,
                 password: dto.password,
-                avatarUrl: dto.avatarUrl,
+                avatar: dto.avatar,
             },
         });
     }
@@ -57,7 +57,7 @@ export class UserService {
             where: { id: userId },
             data: {
                 username: dto.username,
-                avatarUrl: dto.avatarUrl,
+                avatar: dto.avatar,
             },
         });
     }
@@ -87,7 +87,7 @@ export class UserService {
             where: { id: userId },
             select: {
                 username: true,
-                avatarUrl: true,
+                avatar: true,
             },
         });
     }

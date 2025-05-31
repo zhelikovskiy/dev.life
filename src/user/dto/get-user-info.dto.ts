@@ -1,4 +1,4 @@
 export class GetUserInfoDto {
     username: string;
-    avatarUrl: string | null;
+    avatar: string | null;
 }
