@@ -1,6 +1,6 @@
 import {
+    Body,
     Controller,
-    Param,
     Post,
     Req,
     Request,
@@ -8,14 +8,15 @@ import {
 } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ToggleLikeDto } from './dto/toggle-like.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('likes')
 export class LikeController {
     constructor(private likeService: LikeService) {}
 
-    @Post(':projectId')
-    toggle(@Param('projectId') projectId: string, @Req() req: Request) {
-        return this.likeService.toogleLike(projectId, req.user.sub);
+    @Post('')
+    toggle(@Req() req: Request, @Body() dto: ToggleLikeDto) {
+        return this.likeService.toogleLike(req.user.sub, dto);
     }
 }

@@ -1,16 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ToggleLikeDto } from './dto/toggle-like.dto';
 
 @Injectable()
 export class LikeService {
     constructor(private prisma: PrismaService) {}
 
-    async toogleLike(projectId: string, userId: string) {
+    async toogleLike(userId: string, dto: ToggleLikeDto) {
+        if ((dto.postId && dto.projectId) || (!dto.postId && !dto.projectId)) {
+            throw new BadRequestException(
+                'Provide either postId or projectId, but not both',
+            );
+        }
+
+        const where: { userId: string; postId?: string; projectId?: string } = {
+            userId,
+            ...(dto.postId
+                ? { postId: dto.postId }
+                : { projectId: dto.projectId }),
+        };
+
         const existing = await this.prisma.like.findFirst({
-            where: {
-                projectId,
-                userId,
-            },
+            where,
         });
 
         if (existing) {
@@ -22,7 +33,8 @@ export class LikeService {
         } else {
             return await this.prisma.like.create({
                 data: {
-                    projectId,
+                    postId: dto.postId,
+                    projectId: dto.projectId,
                     userId,
                 },
             });
