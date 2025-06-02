@@ -7,11 +7,13 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentService {
     constructor(private prisma: PrismaService) {}
 
-    async create(projectId: string, userId: string, dto: CreateCommentDto) {
+    async create(userId: string, dto: CreateCommentDto) {
         return this.prisma.comment.create({
             data: {
+                parentId: dto.parentId,
                 content: dto.content,
-                projectId: projectId,
+                projectId: dto.projectId,
+                postId: dto.postId,
                 authorId: userId,
             },
         });

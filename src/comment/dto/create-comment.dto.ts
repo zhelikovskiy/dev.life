@@ -2,13 +2,11 @@ import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { IsXor } from 'src/utils/is-xor.validator';
 
 export class CreateCommentDto {
-    @IsNotEmpty()
     @IsUUID()
-    postId: string;
+    postId?: string;
 
-    @IsNotEmpty()
     @IsUUID()
-    projectId: string;
+    projectId?: string;
 
     @IsString()
     @IsOptional()
