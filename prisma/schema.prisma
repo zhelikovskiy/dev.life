@@ -102,7 +102,7 @@ model Comment {
 	author User @relation(fields: [authorId], references: [id])
 	authorId String
 
-	parent Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+	parent Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
 	parentId String?
 	replies Comment[] @relation("CommentReplies")
 
