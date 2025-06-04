@@ -12,4 +12,17 @@ export class TagService {
             create: { name },
         });
     }
+
+    async findOrCreateMany(names: string[]) {
+        const results = await Promise.all(
+            names.map((name) =>
+                this.prismaService.tag.upsert({
+                    where: { name },
+                    update: {},
+                    create: { name },
+                }),
+            ),
+        );
+        return results;
+    }
 }

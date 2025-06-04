@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateProjectDto {
     @IsString()
@@ -9,6 +9,18 @@ export class CreateProjectDto {
     @IsNotEmpty()
     description: string;
 
+    @IsOptional()
     @IsUrl()
-    repositoryLink: string;
+    repositoryLink?: string;
+
+    @IsOptional()
+    @IsString({ each: true })
+    images?: string[];
+
+    @IsString({ each: true })
+    tags: string[];
+
+    @IsOptional()
+    @IsUrl()
+    demoLink?: string;
 }

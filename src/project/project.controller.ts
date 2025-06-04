@@ -21,7 +21,7 @@ export class ProjectController {
 
     @UseGuards(AuthGuard('jwt'))
     @Post()
-    create(@Req() req: Request, @Body() dto: CreateProjectDto) {
+    async create(@Req() req: Request, @Body() dto: CreateProjectDto) {
         return this.projectService.create(req.user.sub, dto);
     }
 

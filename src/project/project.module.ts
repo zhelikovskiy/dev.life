@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ProjectController } from './project.controller';
 import { ProjectService } from './project.service';
+import { TagModule } from 'src/tag/tag.module';
 
 @Module({
-  controllers: [ProjectController],
-  providers: [ProjectService]
+    imports: [TagModule],
+    controllers: [ProjectController],
+    providers: [ProjectService],
 })
 export class ProjectModule {}

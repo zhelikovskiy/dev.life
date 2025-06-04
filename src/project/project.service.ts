@@ -1,17 +1,30 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { TagService } from 'src/tag/tag.service';
 
 @Injectable()
 export class ProjectService {
-    constructor(private prisma: PrismaService) {}
+    constructor(
+        private prisma: PrismaService,
+        private tagService: TagService,
+    ) {}
 
     async create(authorId: string, dto: CreateProjectDto) {
+        const tags = await this.tagService.findOrCreateMany(dto.tags);
+
         return this.prisma.project.create({
             data: {
                 ...dto,
                 authorId,
+                tags: {
+                    connect: tags.map((tag) => ({ id: tag.id })),
+                },
             },
         });
     }
@@ -20,7 +33,17 @@ export class ProjectService {
         return this.prisma.project.findMany({
             include: {
                 author: true,
-                comments: true,
+                comments: {
+                    include: {
+                        replies: {
+                            include: {
+                                replies: true,
+                            },
+                        },
+                        author: true,
+                    },
+                },
+                tags: true,
                 _count: {
                     select: { likes: true },
                 },
@@ -33,7 +56,17 @@ export class ProjectService {
             where: { id },
             include: {
                 author: true,
-                comments: true,
+                comments: {
+                    include: {
+                        replies: {
+                            include: {
+                                replies: true,
+                            },
+                        },
+                        author: true,
+                    },
+                },
+                tags: true,
             },
         });
     }
@@ -43,19 +76,28 @@ export class ProjectService {
         if (!project || project.authorId !== authorId) {
             throw new ForbiddenException('Access denied');
         }
+
+        const tags = dto.tags
+            ? await this.tagService.findOrCreateMany(dto.tags)
+            : null;
+
         return this.prisma.project.update({
             where: { id },
             data: {
                 ...dto,
+                tags: tags
+                    ? { set: tags.map((tag) => ({ id: tag.id })) }
+                    : undefined,
             },
         });
     }
 
     async remove(id: string, authorId: string) {
         const project = await this.prisma.project.findUnique({ where: { id } });
-        if (!project || project.authorId !== authorId) {
+        if (!project) throw new NotFoundException('Project not found');
+        if (project.authorId !== authorId)
             throw new ForbiddenException('Access denied');
-        }
+
         return this.prisma.project.delete({ where: { id } });
     }
 }
