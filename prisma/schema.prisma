@@ -50,7 +50,7 @@ model Project {
 	id String @id @default(uuid())
 	title String
 	description String
-	repositoryLink  String
+	repositoryLink  String?
 	images String[]
 	demoLink String?
 	status ProjectStatus @default(IN_PROGRESS)
