@@ -3,11 +3,11 @@ import { IsOptional, IsString, IsUrl } from 'class-validator';
 export class UpdateProjectDto {
     @IsOptional()
     @IsString()
-    title: string;
+    title?: string;
 
     @IsOptional()
     @IsString()
-    description: string;
+    description?: string;
 
     @IsOptional()
     @IsUrl()

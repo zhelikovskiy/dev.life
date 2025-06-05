@@ -32,7 +32,7 @@ export class ProjectController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.projectService.findOne(id);
+        return this.projectService.findOneById(id);
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -42,12 +42,12 @@ export class ProjectController {
         @Req() req: Request,
         @Body() dto: UpdateProjectDto,
     ) {
-        return this.projectService.update(id, req.user.sub, dto);
+        return this.projectService.updateOne(id, req.user.sub, dto);
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
-    remove(@Param('id') id: string, @Req() req: Request) {
-        return this.projectService.remove(id, req.user.sub);
+    delete(@Param('id') id: string, @Req() req: Request) {
+        return this.projectService.deleteOne(id, req.user.sub);
     }
 }

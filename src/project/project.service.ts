@@ -51,7 +51,7 @@ export class ProjectService {
         });
     }
 
-    async findOne(id: string) {
+    async findOneById(id: string) {
         return this.prisma.project.findUnique({
             where: { id },
             include: {
@@ -67,32 +67,33 @@ export class ProjectService {
                     },
                 },
                 tags: true,
+                _count: {
+                    select: { likes: true },
+                },
             },
         });
     }
 
-    async update(id: string, authorId: string, dto: UpdateProjectDto) {
+    async updateOne(id: string, authorId: string, dto: UpdateProjectDto) {
         const project = await this.prisma.project.findUnique({ where: { id } });
-        if (!project || project.authorId !== authorId) {
+        if (!project) throw new NotFoundException('Project not found');
+        if (project.authorId !== authorId)
             throw new ForbiddenException('Access denied');
-        }
 
         const tags = dto.tags
             ? await this.tagService.findOrCreateMany(dto.tags)
-            : null;
+            : [];
 
         return this.prisma.project.update({
             where: { id },
             data: {
                 ...dto,
-                tags: tags
-                    ? { set: tags.map((tag) => ({ id: tag.id })) }
-                    : undefined,
+                tags: { set: tags.map((tag) => ({ id: tag.id })) },
             },
         });
     }
 
-    async remove(id: string, authorId: string) {
+    async deleteOne(id: string, authorId: string) {
         const project = await this.prisma.project.findUnique({ where: { id } });
         if (!project) throw new NotFoundException('Project not found');
         if (project.authorId !== authorId)
