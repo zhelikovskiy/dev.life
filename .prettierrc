@@ -1,7 +1,11 @@
 {
-  "prettier.useTabs": true,
-  "prettier.endOfLine": "crlf",
-  "singleQuote": true,
-  "trailingComma": "all",
-  "tabWidth": 4
+    "prettier.useTabs": true,
+    "prettier.endOfLine": "crlf",
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "[yaml]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    }
 }
