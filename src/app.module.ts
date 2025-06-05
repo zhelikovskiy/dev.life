@@ -11,6 +11,7 @@ import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { FollowModule } from './follow/follow.module';
 import { TagModule } from './tag/tag.module';
+import { PostModule } from './post/post.module';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { TagModule } from './tag/tag.module';
         UserModule,
         FollowModule,
         TagModule,
+        PostModule,
     ],
     controllers: [AppController],
     providers: [AppService],
